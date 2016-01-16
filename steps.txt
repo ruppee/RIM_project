@@ -1,0 +1,12 @@
+1rst
+
+in Server: rmiregistry &
+
+2nd
+in Server: java -Djava.Rmi.server.hostname=192.168.1.39 project.downloads.Server
+
+3rd
+in Client:
+
+java project.downloads.Client 192.168.1.39
+

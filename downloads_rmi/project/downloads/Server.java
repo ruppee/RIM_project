@@ -35,14 +35,14 @@
  * intended for use in the design, construction, operation or
  * maintenance of any nuclear facility.
  */
-package package.downloads;
+package project.downloads;
 
 import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-public class Server implements Hello {
+public class Server implements Downloads {
 
     public Server() {}
 
@@ -54,7 +54,7 @@ public class Server implements Hello {
 
         try {
             Server obj = new Server();
-            Hello stub = (Hello) UnicastRemoteObject.exportObject(obj, 0);
+            Downloads stub = (Downloads) UnicastRemoteObject.exportObject(obj, 0);
 
             // Bind the remote object's stub in the registry
             Registry registry = LocateRegistry.getRegistry();

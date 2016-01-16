@@ -35,11 +35,12 @@
  * intended for use in the design, construction, operation or
  * maintenance of any nuclear facility.
  */
-package package.downloads;
+package project.downloads;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface Downloads extends Remote {
     String sayHello() throws RemoteException;
+    public int suma (int a, int b) throws java.rmi.RemoteException; 
 }
