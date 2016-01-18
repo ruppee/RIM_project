@@ -54,8 +54,7 @@ public class GuiClient extends Frame implements ActionListener {
    public void actionPerformed(ActionEvent evt) {
 
         try {
-                if (System.getSecurityManager()== null)
-                { System.setSecurityManager(new SecurityManager()); }
+                System.setSecurityManager(new SecurityManager());
 	    	
                 Interface client = (Interface)Naming.lookup("rmi://localhost/getvid");
              	    	

@@ -10,10 +10,7 @@ import java.util.*;
 public class Client {
 	public static void main (String[] argv) {
 	    try { // again we try to define the security manager
-                if (System.getSecurityManager()== null)
-                {
                     System.setSecurityManager(new SecurityManager());
-                }
 	    
                 /* The "client" on client side is a reference object that refers "server" on server side.
                  * which means that "server" on the server is known as remote object. Now "client" refers the remote object

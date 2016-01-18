@@ -12,10 +12,7 @@ public static void main (String[] argv) {
     try {
         // it's importand to define the security manager as it handles the policies over the network,
         // and specify a security policy file so that the code is granted the security permissions it needs to run.
-	    	if (System.getSecurityManager()== null)
-            {
                 System.setSecurityManager(new SecurityManager());
-            }
            
 
         // We define the remote interface object "server" by using the implementation program constructor Impl()
