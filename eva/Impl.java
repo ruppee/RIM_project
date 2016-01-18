@@ -14,10 +14,10 @@ public class Impl extends UnicastRemoteObject implements Interface  {
     
     // WE DON"T need to invoke a superclass contructor as it is done by JVM
     // we define a constructor that invokes the superclass constructor
-    //public Impl() throws RemoteException
-    //{
-    //    super(); // super class constructor of the Object class
-    //}
+    public Impl() throws RemoteException
+    {
+        super(); // super class constructor of the Object class
+    }
 
     // we define getting the video function
     public String getvid(String link) throws RemoteException 
@@ -54,5 +54,34 @@ public class Impl extends UnicastRemoteObject implements Interface  {
         // it returns a String
         return L;
     }
+     public void streamvid(String msg) throws RemoteException
+     {try {
 
+        Runtime.getRuntime().exec("smplayer " +msg);     }
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+      }
+public void downvid(String msg) throws RemoteException
+     {try {
+        Runtime.getRuntime().exec("wget -c " +msg);     }
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+     }
+     public void qrvid(String msg) throws RemoteException
+     {try {
+        Runtime.getRuntime().exec("qrencode "+msg + " -o temp.png");
+        Runtime.getRuntime().exec("display temp.png");     }
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+
+     }
 }

@@ -9,6 +9,9 @@ import java.awt.event.*;  // Using AWT event classes and listener interfaces
 public class GuiClient extends Frame implements ActionListener {
    private Label lblInput;     // Declare input Label
    private Label lblOutput;    // Declare output Label
+   private Button Butqr;       // Declare a button for qr
+   private Button Butdow;      // Declare a button for download
+   private Button Butstr;      // Declare a buttong for streaming
    private TextField tfInput;  // Declare input TextField
    private TextField tfOutput; // Declare output TextField
    private String link;        // Input link
@@ -38,6 +41,18 @@ public class GuiClient extends Frame implements ActionListener {
       tfOutput.setEditable(false);  // read-only
       add(tfOutput);                // "super" Frame adds TextField
  
+
+      Butqr = new Button("Qr Code");   // construct Button
+      add(Butqr);                    // "super" Frame adds Button
+
+      Butstr = new Button("Stream");   // construct Button
+      add(Butstr);                    // "super" Frame adds Button
+
+      Butdow = new Button("Download");   // construct Button
+      add(Butdow);                    // "super" Frame adds Button
+
+
+
       setTitle("Client");  // "super" Frame sets title
       setSize(900, 300);  // "super" Frame sets initial window size
       setVisible(true);   // "super" Frame shows
