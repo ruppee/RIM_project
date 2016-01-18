@@ -24,23 +24,22 @@ public class GuiClient extends Frame implements ActionListener {
          // "super" Frame sets layout to FlowLayout, which arranges the components
          //  from left-to-right, and flow to next row from top-to-bottom.
  
-      lblInput = new Label("Enter a link: "); // Construct Label
+      lblInput = new Label("Enter a link"); // Construct Label
       add(lblInput);               // "super" Frame adds Label
  
-      tfInput = new TextField(200); // Construct TextField
+      tfInput = new TextField(100); // Construct TextField
       add(tfInput);                // "super" Frame adds TextField
  
       tfInput.addActionListener(this);
          // Hitting Enter on TextField fires ActionEvent
          // tfInput (TextField) registers this instance as ActionEvent listener
  
-      lblOutput = new Label("The download link is below: ");  // allocate Label
+      lblOutput = new Label("The download link is below");  // allocate Label
       add(lblOutput);               // "super" Frame adds Label
  
-      tfOutput = new TextField(200); // allocate TextField
+      tfOutput = new TextField(100); // allocate TextField
       tfOutput.setEditable(false);  // read-only
       add(tfOutput);                // "super" Frame adds TextField
- 
 
       Butqr = new Button("Qr Code");   // construct Button
       add(Butqr);                    // "super" Frame adds Button
@@ -50,8 +49,6 @@ public class GuiClient extends Frame implements ActionListener {
 
       Butdow = new Button("Download");   // construct Button
       add(Butdow);                    // "super" Frame adds Button
-
-
 
       setTitle("Client");  // "super" Frame sets title
       setSize(900, 300);  // "super" Frame sets initial window size

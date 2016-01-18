@@ -26,7 +26,7 @@ public class Impl extends UnicastRemoteObject implements Interface  {
         
         // as it needs to call an external function 
         try {
-        Process p = Runtime.getRuntime().exec("python pridown.py "+link);
+        Process p = Runtime.getRuntime().exec("python pridown.py "+ link);
 
         BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
 

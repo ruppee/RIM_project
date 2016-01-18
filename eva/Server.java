@@ -21,7 +21,7 @@ public static void main (String[] argv) {
         // RMI uses a naming service where an alias name is maintained and show be used by the client to invoke the remote method
         
         //The rebind() method of Naming class binds the object "server" along alias name "getvid" with the RMI registry.
-	    	Naming.rebind("rmi://localhost/getvid", server); 
+	    	Naming.rebind("rmi://10.109.74.245/getvid", server); 
             //Alias name "getvid" refers the object "server" on server side. Object "server" RMI registry is connected internally with the Remote reference layer.
 
 	    	System.out.println("Server is ready:");// we print a message to clarify the binding

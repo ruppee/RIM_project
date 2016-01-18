@@ -22,7 +22,7 @@ public class Client {
                  * "client" and "server" communicates each other and it is known as object communication. 
                  * This is how remote method invocation and object communication works.
                  */
-                Interface client = (Interface)Naming.lookup("rmi://localhost/getvid");
+                Interface client = (Interface)Naming.lookup("rmi://10.109.74.245/getvid");
         while(true) //as long as the client is running our code runs
         {
                 System.out.println("Enter Your link and press Enter:");
