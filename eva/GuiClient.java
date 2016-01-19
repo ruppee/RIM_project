@@ -1,83 +1,196 @@
+/**This program obtains a reference of the remote 
+ * object of server and invokes remote methods.
+ * This is the GUI version of the Client
+ * that is more advanced and has additional functionalities
+ */
+
 import java.rmi.*;
 import java.rmi.server.*;
 import java.util.*;
 import java.awt.*;        // Using AWT container and component classes
 import java.awt.event.*;  // Using AWT event classes and listener interfaces
  
-// A GUI program inherits from the top-level container java.awt.Frame
+/******** A GUI program using container java.awt.Frame ************/
 
 public class GuiClient extends Frame implements ActionListener {
    private Label lblInput;     // Declare input Label
    private Label lblOutput;    // Declare output Label
-   private Button Butqr;       // Declare a button for qr
-   private Button Butdow;      // Declare a button for download
-   private Button Butstr;      // Declare a buttong for streaming
+   private Label lbIP;         // Declare IP Label
+   private TextField tfIP;     // Declare IP TextField
    private TextField tfInput;  // Declare input TextField
    private TextField tfOutput; // Declare output TextField
+   private Button Butqr;	   // Declare the Button to generate QR code
+   private Button Butstr;	   // Declare the Button to stream
+   private Button Butdow;	   // Declare the Button to download
    private String link;        // Input link
    private String vlink;       // Output link 
-
-     
-   /** Constructor to setup the UI components and event handling */
+   private String ipadd;	   // IP address of the server
+  
    public GuiClient() {
       setLayout(new FlowLayout());
-         // "super" Frame sets layout to FlowLayout, which arranges the components
-         //  from left-to-right, and flow to next row from top-to-bottom.
  
-      lblInput = new Label("Enter a link"); // Construct Label
-      add(lblInput);               // "super" Frame adds Label
+ /**** We define the textfields and buttons*******/ 
  
-      tfInput = new TextField(100); // Construct TextField
-      add(tfInput);                // "super" Frame adds TextField
+      lbIP = new Label("Enter the IP address of the server: "); // Construct Label
+      add(lbIP);               
  
-      tfInput.addActionListener(this);
+      tfIP = new TextField(110); 	// Construct TextField
+      add(tfIP);                	// "super" Frame adds TextField
+	  tfIP.setText("192.168.1.8");	// Set a default value 
+	  
+      tfIP.addActionListener(this);
          // Hitting Enter on TextField fires ActionEvent
          // tfInput (TextField) registers this instance as ActionEvent listener
  
-      lblOutput = new Label("The download link is below");  // allocate Label
-      add(lblOutput);               // "super" Frame adds Label
+      lblInput = new Label("Enter a link below: "); 
+      add(lblInput);              
+   
+      tfInput = new TextField(110); 
+      add(tfInput);                
+	  tfInput.setText("http://vodlocker.com/budq9rt5wt0e"); 
+      tfInput.addActionListener(this);
  
-      tfOutput = new TextField(100); // allocate TextField
+      lblOutput = new Label("The download link is below: ");
+      add(lblOutput);               
+ 
+      tfOutput = new TextField(110); 
       tfOutput.setEditable(false);  // read-only
-      add(tfOutput);                // "super" Frame adds TextField
+      add(tfOutput);                
+ 
+ 
+ /**************QR CODE***************/
+      Butqr = new Button("Qr Code");   
+      add(Butqr);                    
+	
+	  Butqr.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+            qrvidlink();
+            tfOutput.setText("The Qr code will be generated");
+         }
+      });
 
-      Butqr = new Button("Qr Code");   // construct Button
-      add(Butqr);                    // "super" Frame adds Button
-
+ /**************Stream***************/
       Butstr = new Button("Stream");   // construct Button
       add(Butstr);                    // "super" Frame adds Button
-
-      Butdow = new Button("Download");   // construct Button
-      add(Butdow);                    // "super" Frame adds Button
+	  
+	  Butstr.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+				streamvidlink();
+				tfOutput.setText("The video is being streamed");
+         }
+      });
+      
+ /**************Download***************/
+      Butdow = new Button("Download");   
+      add(Butdow);                    
+ 
+ 	  Butdow.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+				 downvidlink();
+				tfOutput.setText("The video is being downloaded");
+         }
+      });
+ 
 
       setTitle("Client");  // "super" Frame sets title
       setSize(900, 300);  // "super" Frame sets initial window size
       setVisible(true);   // "super" Frame shows
    }
  
-   /** The entry main() method */
-   public static void main(String[] args) {
+
+   public static void main(String[] args) 
+   {
       // Invoke the constructor to setup the GUI, by allocating an anonymous instance
       new GuiClient();
       		}
+      		
+/*********************************************************************/
+/******** functionality when we press enter on the text field *******/
+/*******************************************************************/
 
-   /** ActionEvent handler - Called back upon hitting enter key on TextField */
    @Override
    public void actionPerformed(ActionEvent evt) {
+			   vlink = getvidlink(); // it gets the video link from the text input
+               tfOutput.setText(vlink); // and tries to set the direct link to the video
+            }
+            
 
-        try {
-                System.setSecurityManager(new SecurityManager());
+/**********************************************************************************/
+/************ Here we define the functionality of the buttons ********************/
+/********************************************************************************/
+// we define the method for getting a video link when pressing enter
+	public String getvidlink() {
+		try {
+				System.setSecurityManager(new SecurityManager()); 
 	    	
-                Interface client = (Interface)Naming.lookup("rmi://localhost/getvid");
+				ipadd= tfIP.getText();
+                Interface client = (Interface)Naming.lookup("rmi://"+ipadd+"/getvid");
              	    	
                 // Get the String entered into the TextField tfInput, convert to int
                 link = tfInput.getText();
                 vlink = client.getvid(link);
-                tfOutput.setText(vlink);
             
             }catch (Exception e) {
 	    		System.out.println("[System] Server failed: " + e);
 	    	} 
+	    	return vlink;
+	}
 
-}
+// we define the method for getting a streaming link when pressing on the stream button
+	public void streamvidlink() {
+		try {
+                System.setSecurityManager(new SecurityManager()); 
+	    	
+				ipadd= tfIP.getText();
+                Interface client = (Interface)Naming.lookup("rmi://"+ipadd+"/getvid");
+             	    	
+                // Get the String entered into the TextField tfInput, convert to int
+                link = tfInput.getText();
+                vlink = client.getvid(link);
+                client.streamvid(vlink);
+      
+            }catch (Exception e) {
+	    		System.out.println("[System] Server failed: " + e);
+	    	} 
+	    	
+			
+	}
+
+// we define the method for downloading when pressing on the download button 
+	public void downvidlink() {
+		try {
+                System.setSecurityManager(new SecurityManager()); 
+	    	
+				ipadd= tfIP.getText();
+                Interface client = (Interface)Naming.lookup("rmi://"+ipadd+"/getvid");
+             	    	
+                // Get the String entered into the TextField tfInput, convert to int
+                link = tfInput.getText();
+                vlink = client.getvid(link);
+                client.downvid(vlink);
+      
+            }catch (Exception e) {
+	    		System.out.println("[System] Server failed: " + e);
+	    	} 		
+	}
+
+// we define the method for downloading when pressing on the download button 
+	public void qrvidlink() {
+		try {
+                System.setSecurityManager(new SecurityManager()); 
+	    	
+				ipadd= tfIP.getText();
+                Interface client = (Interface)Naming.lookup("rmi://"+ipadd+"/getvid");
+             	    	
+                // Get the String entered into the TextField tfInput, convert to int
+                link = tfInput.getText();
+                vlink = client.getvid(link);
+                client.qrvid(vlink);
+      
+            }catch (Exception e) {
+	    		System.out.println("[System] Server failed: " + e);
+	    	} 
+	    	
+			
+	}
 } 

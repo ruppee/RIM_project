@@ -1,9 +1,9 @@
-/* This is simple detailed program where we implement 
- * all the abstract methods of the remote interface.
+/** This is simple detailed program where we implement 
+ *  all the abstract methods of the remote interface, and
+ *  we explain explicitely their functionality
  */
 
-
-import java.rmi.*;      // for remote exception
+import java.rmi.*;        // for remote exception
 import java.rmi.server.*; // this one for the Unicast Remote Object
 import java.io.*;
 
@@ -12,48 +12,43 @@ public class Impl extends UnicastRemoteObject implements Interface  {
 
     public String link; // the link provided by the user
     
-    // WE DON"T need to invoke a superclass contructor as it is done by JVM
     // we define a constructor that invokes the superclass constructor
     public Impl() throws RemoteException
     {
         super(); // super class constructor of the Object class
     }
 
-    // we define getting the video function
+/*
+ * All the functions implemented utilize external commands of the server OS
+ * which is already configure. We already installed all the dependencies like
+ * python, selenium (the library for webdriver) and the qr code program.
+ */
+
+/******************* Printing the video function ******************/
+
+// getvid returns a string which is the direct link to the video
     public String getvid(String link) throws RemoteException 
     {
-        String L="Enter a valid link";
-        
-        // as it needs to call an external function 
-        try {
-        Process p = Runtime.getRuntime().exec("python pridown.py "+ link);
-
-        BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
-        BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-
-        // print the std output
-        while ( stdInput.readLine() != null) 
-        { 
-            L=stdInput.readLine(); 
-        }
-
-        // Print the std error
-        while ( stdError.readLine() != null) 
-        {
-            L=stdError.readLine();
-        }
-
-             }
-        catch (IOException e) 
-        {
-            L="Something went terribly wrong, blame Canada 0.0\n";
-            e.printStackTrace();
-            System.exit(-1);
-        }
-        // it returns a String
-        return L;
+		String line;
+		String L="";
+			try {
+				Process p = Runtime.getRuntime().exec("python pridown.py "+ link);
+				BufferedReader input = new BufferedReader
+					(new InputStreamReader(p.getInputStream()));
+				while ((line = input.readLine()) != null) {
+					L += (line + '\n');
+				}
+				input.close();
+				}
+			catch (Exception ex) {
+				L+="Error in executing the python command";
+				ex.printStackTrace();
+			}
+			return L;
     }
+    
+ /******************* Streaming the video function ******************/
+ // this function requires smplayer to be installed as media player
      public void streamvid(String msg) throws RemoteException
      {try {
 
@@ -64,7 +59,9 @@ public class Impl extends UnicastRemoteObject implements Interface  {
             System.exit(-1);
         }
       }
-public void downvid(String msg) throws RemoteException
+      
+  /******************* Downloading the video function ******************/
+	public void downvid(String msg) throws RemoteException
      {try {
         Runtime.getRuntime().exec("wget -c " +msg);     }
         catch (IOException e) 
@@ -73,6 +70,8 @@ public void downvid(String msg) throws RemoteException
             System.exit(-1);
         }
      }
+     
+   /******************* Qr Code Generation function ******************/
      public void qrvid(String msg) throws RemoteException
      {try {
         Runtime.getRuntime().exec("qrencode "+msg + " -o temp.png");
@@ -84,4 +83,5 @@ public void downvid(String msg) throws RemoteException
         }
 
      }
+
 }
